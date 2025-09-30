@@ -1,0 +1,702 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Miraen's Gallery</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class'
+        }
+    </script>
+    <link rel="icon" type="image/png" href="img/icon-full.png">
+    <style>
+        html{
+            scroll-behavior: smooth;
+        }
+
+        body {
+            animation: pageLoadFade 1.5s ease-in-out;
+        }
+
+        @keyframes pageLoadFade {
+            from {
+                opacity: 0;
+            }
+            to {
+                opacity: 1;
+            }
+        }
+
+        .fade-edges {
+            mask-image: linear-gradient(to right, transparent, black 10%, black 90%, transparent);
+            -webkit-mask-image: linear-gradient(to right, transparent, black 10%, black 90%, transparent);
+        }
+
+        .slide{
+            animation: slideIn 0.8s ease-out;
+        }
+
+        @keyframes slideIn {
+            from { 
+                opacity: 0;
+                transform: translateX(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+
+        .portfolio-item {
+            opacity: 0;
+            transform: translateY(50px);
+            transition: opacity 0.6s ease-out, transform 0.6s ease-out;
+        }
+
+        .portfolio-item.show {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .hidden-photo {
+            display: none;
+        }
+    </style>
+</head>
+
+<body class="bg-gray-50 dark:bg-gray-900 md:mx-16 sm:mx-8 mx-4 transition-colors duration-300">
+    <nav class="fixed lg:left-16 lg:right-16 sm:left-8 sm:right-8 left-8 right-8 top-5 z-50 bg-white/70 dark:bg-gray-700/70 backdrop-blur-lg shadow-xl rounded-full border border-white/20 dark:border-gray-700/20">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between h-16">
+                <div class="flex items-center">
+                    <a href="#" class="flex items-center space-x-2">
+                        <div class="w-10 h-10 bg-green-600 rounded-lg flex items-center justify-center">
+                            <span class="text-white font-bold text-xl">M</span>
+                        </div>
+                        <span class="text-xl font-bold text-gray-800 dark:text-white">Miraen's Gallery</span>
+                    </a>
+                </div>
+
+                <div class="hidden md:flex items-center space-x-8">
+                    <a href="#home" class="text-gray-700 dark:text-gray-300 hover:text-green-600 dark:hover:text-green-400 transition duration-200 font-medium">Beranda</a>
+                    <a href="#tentang" class="text-gray-700 dark:text-gray-300 hover:text-green-600 dark:hover:text-green-400 transition duration-200 font-medium">Tentang</a>
+                    <a href="#portfolio" class="text-gray-700 dark:text-gray-300 hover:text-green-600 dark:hover:text-green-400 transition duration-200 font-medium">Portfolio</a>
+                    <a href="#layanan" class="text-gray-700 dark:text-gray-300 hover:text-green-600 dark:hover:text-green-400 transition duration-200 font-medium">Layanan</a>
+                    <a href="#kontak" class="text-gray-700 dark:text-gray-300 hover:text-green-600 dark:hover:text-green-400 transition duration-200 font-medium">Kontak</a>
+                    <button id="theme-toggle" class="p-2 rounded-lg bg-gray-200 dark:bg-gray-700 hover:bg-gray-300 dark:hover:bg-gray-600 transition duration-200">
+                        <svg id="theme-toggle-dark-icon" class="hidden w-5 h-5 text-gray-800" fill="currentColor" viewBox="0 0 20 20">
+                            <path d="M17.293 13.293A8 8 0 016.707 2.707a8.001 8.001 0 1010.586 10.586z"></path>
+                        </svg>
+                        <svg id="theme-toggle-light-icon" class="hidden w-5 h-5 text-yellow-400" fill="currentColor" viewBox="0 0 20 20">
+                            <path d="M10 2a1 1 0 011 1v1a1 1 0 11-2 0V3a1 1 0 011-1zm4 8a4 4 0 11-8 0 4 4 0 018 0zm-.464 4.95l.707.707a1 1 0 001.414-1.414l-.707-.707a1 1 0 00-1.414 1.414zm2.12-10.607a1 1 0 010 1.414l-.706.707a1 1 0 11-1.414-1.414l.707-.707a1 1 0 011.414 0zM17 11a1 1 0 100-2h-1a1 1 0 100 2h1zm-7 4a1 1 0 011 1v1a1 1 0 11-2 0v-1a1 1 0 011-1zM5.05 6.464A1 1 0 106.465 5.05l-.708-.707a1 1 0 00-1.414 1.414l.707.707zm1.414 8.486l-.707.707a1 1 0 01-1.414-1.414l.707-.707a1 1 0 011.414 1.414zM4 11a1 1 0 100-2H3a1 1 0 000 2h1z" fill-rule="evenodd" clip-rule="evenodd"></path>
+                        </svg>
+                    </button>
+                    <a href="#" class="bg-green-600 text-white px-6 py-2 rounded-lg hover:bg-green-700 transition duration-200 font-medium">Masuk</a>
+                </div>
+
+                <div class="md:hidden flex items-center gap-2">
+                    <button id="theme-toggle-mobile" class="p-2 rounded-lg bg-gray-200 dark:bg-gray-700">
+                        <svg id="theme-toggle-dark-icon-mobile" class="hidden w-5 h-5 text-gray-800" fill="currentColor" viewBox="0 0 20 20">
+                            <path d="M17.293 13.293A8 8 0 016.707 2.707a8.001 8.001 0 1010.586 10.586z"></path>
+                        </svg>
+                        <svg id="theme-toggle-light-icon-mobile" class="hidden w-5 h-5 text-yellow-400" fill="currentColor" viewBox="0 0 20 20">
+                            <path d="M10 2a1 1 0 011 1v1a1 1 0 11-2 0V3a1 1 0 011-1zm4 8a4 4 0 11-8 0 4 4 0 018 0zm-.464 4.95l.707.707a1 1 0 001.414-1.414l-.707-.707a1 1 0 00-1.414 1.414zm2.12-10.607a1 1 0 010 1.414l-.706.707a1 1 0 11-1.414-1.414l.707-.707a1 1 0 011.414 0zM17 11a1 1 0 100-2h-1a1 1 0 100 2h1zm-7 4a1 1 0 011 1v1a1 1 0 11-2 0v-1a1 1 0 011-1zM5.05 6.464A1 1 0 106.465 5.05l-.708-.707a1 1 0 00-1.414 1.414l.707.707zm1.414 8.486l-.707.707a1 1 0 01-1.414-1.414l.707-.707a1 1 0 011.414 1.414zM4 11a1 1 0 100-2H3a1 1 0 000 2h1z" fill-rule="evenodd" clip-rule="evenodd"></path>
+                        </svg>
+                    </button>
+                    <button id="mobile-menu-button" class="text-gray-700 dark:text-gray-300 hover:text-green-600 focus:outline-none">
+                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path>
+                        </svg>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <div id="mobile-menu" class="hidden md:hidden bg-white/80 dark:bg-gray-800/80 backdrop-blur-lg border-t border-white/30 dark:border-gray-700/30 rounded-b-3xl mt-2">
+            <div class="px-4 pt-2 pb-4 space-y-2">
+                <a href="#home" class="block px-4 py-2 text-gray-700 dark:text-gray-300 hover:bg-green-50 dark:hover:bg-gray-700 hover:text-green-600 rounded-lg transition duration-200">Beranda</a>
+                <a href="#tentang" class="block px-4 py-2 text-gray-700 dark:text-gray-300 hover:bg-green-50 dark:hover:bg-gray-700 hover:text-green-600 rounded-lg transition duration-200">Tentang</a>
+                <a href="#portfolio" class="block px-4 py-2 text-gray-700 dark:text-gray-300 hover:bg-green-50 dark:hover:bg-gray-700 hover:text-green-600 rounded-lg transition duration-200">Portfolio</a>
+                <a href="#layanan" class="block px-4 py-2 text-gray-700 dark:text-gray-300 hover:bg-green-50 dark:hover:bg-gray-700 hover:text-green-600 rounded-lg transition duration-200">Layanan</a>
+                <a href="#kontak" class="block px-4 py-2 text-gray-700 dark:text-gray-300 hover:bg-green-50 dark:hover:bg-gray-700 hover:text-green-600 rounded-lg transition duration-200">Kontak</a>
+                <a href="#" class="block px-4 py-2 bg-green-600 text-white text-center rounded-lg hover:bg-green-700 transition duration-200 font-medium">Masuk</a>
+            </div>
+        </div>
+    </nav>
+
+    <div id="home" class="pt-8">
+        <div class="relative bg-gray-50 dark:bg-gray-900 overflow-hidden rounded-3xl transition-colors duration-300">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20 md:py-32">
+                <div class="grid md:grid-cols-2 gap-12 items-center">
+                    <div class="space-y-6">
+                        <h1 class="text-4xl md:text-6xl font-bold text-gray-900 dark:text-white leading-tight">
+                            Sometimes, life is just about <br> <span class="text-green-600 dark:text-green-400">the moments</span>
+                        </h1>
+                        <p class="text-lg md:text-xl text-gray-600 dark:text-gray-300 italic">
+                            That's why I love to capture it.
+                        </p>
+                        <div class="flex flex-col sm:flex-row gap-4">
+                            <button class="bg-green-600 text-white px-8 py-3 rounded-lg hover:bg-green-800 transition duration-200 font-medium text-lg">
+                                Mulai Sekarang
+                            </button>
+                            <button class="border-2 border-green-600 dark:border-green-400 text-green-600 dark:text-green-400 px-8 py-3 rounded-lg hover:bg-green-50 dark:hover:bg-gray-700 transition duration-200 font-medium text-lg">
+                                Pelajari Lebih Lanjut
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="relative">
+                        <div class="fade-edges relative h-96 bg-white dark:bg-gray-700 rounded-2xl shadow-2xl overflow-hidden">
+                            <div id="slideshow" class="w-full h-full relative">
+                                <div class="slide absolute inset-0 flex items-center justify-center">
+                                    <img src="https://images.unsplash.com/photo-1452587925148-ce544e77e70d?w=800&h=600&fit=crop" alt="Slideshow" class="absolute inset-0 w-full h-full object-cover">
+                                    <div class="absolute inset-0 bg-black/40"></div>
+                                    <div class="relative text-center text-white p-8 z-10">
+                                        <svg class="w-24 h-24 mx-auto mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path>
+                                        </svg>
+                                        <h3 class="text-3xl font-bold mb-2">Jangan Khawatir</h3>
+                                        <p class="text-lg">Kami bisa diandalkan</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="flex justify-center gap-2 mt-6">
+                            <button class="dot w-3 h-3 rounded-full bg-green-600 transition duration-300" data-slide="0"></button>
+                            <button class="dot w-3 h-3 rounded-full bg-gray-300 dark:bg-gray-600 hover:bg-gray-400 transition duration-300" data-slide="1"></button>
+                            <button class="dot w-3 h-3 rounded-full bg-gray-300 dark:bg-gray-600 hover:bg-gray-400 transition duration-300" data-slide="2"></button>
+                            <button class="dot w-3 h-3 rounded-full bg-gray-300 dark:bg-gray-600 hover:bg-gray-400 transition duration-300" data-slide="3"></button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="tentang" class="max-w-7xl mx-auto sm:px-6 lg:px-8 py-20">
+        <h1 class="mt-10 text-4xl md:text-6xl font-bold text-center text-gray-900 dark:text-white mb-12">Miraen</h1>
+        <h3 class="text-center text-gray-900 dark:text-white mb-2">Miraen adalah sebuah tim profesional yang telah berpengalaman selama 5 tahun dalam dunia fotografi dan videografi.</h3>
+        <h2 class="mt-10 text-3xl md:text-4xl font-bold text-center text-gray-900 dark:text-white mb-12">Mengapa Memilih Kami?</h2>
+        <div class="grid md:grid-cols-3 gap-8">
+            <div class="text-center p-6">
+                <div class="w-16 h-16 bg-green-100 dark:bg-green-900 rounded-full flex items-center justify-center mx-auto mb-4">
+                    <svg class="w-8 h-8 text-green-600 dark:text-green-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                    </svg>
+                </div>
+                <h3 class="text-xl font-bold text-gray-900 dark:text-white mb-2">Profesional</h3>
+                <p class="text-gray-600 dark:text-gray-300">Hasil foto berkualitas tinggi dengan editing profesional</p>
+            </div>
+            <div class="text-center p-6">
+                <div class="w-16 h-16 bg-green-100 dark:bg-green-900 rounded-full flex items-center justify-center mx-auto mb-4">
+                    <svg class="w-8 h-8 text-green-600 dark:text-green-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6"></path>
+                    </svg>
+                </div>
+                <h3 class="text-xl font-bold text-gray-900 dark:text-white mb-2">Kreatif</h3>
+                <p class="text-gray-600 dark:text-gray-300">Konsep foto yang unik dan menarik untuk setiap momen</p>
+            </div>
+            <div class="text-center p-6">
+                <div class="w-16 h-16 bg-green-100 dark:bg-green-900 rounded-full flex items-center justify-center mx-auto mb-4">
+                    <svg class="w-8 h-8 text-green-600 dark:text-green-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6V4m0 2a2 2 0 100 4m0-4a2 2 0 110 4m-6 8a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4m6 6v10m6-2a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4"></path>
+                    </svg>
+                </div>
+                <h3 class="text-xl font-bold text-gray-900 dark:text-white mb-2">Fleksibel</h3>
+                <p class="text-gray-600 dark:text-gray-300">Paket yang dapat disesuaikan dengan kebutuhan Anda</p>
+            </div>
+        </div>
+    </div>
+
+    <div id="portfolio" class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20">
+        <div class="mt-10 text-center mb-12">
+            <h2 class="text-3xl md:text-4xl font-bold text-gray-900 dark:text-white mb-4">Portfolio</h2>
+            <p class="text-lg text-gray-600 dark:text-gray-300">Koleksi karya terbaik kami yang mengabadikan momen berharga</p>
+        </div>
+
+        <div id="portfolio-grid" class="columns-1 sm:columns-2 lg:columns-3 xl:columns-4 gap-4 space-y-4">
+            <div class="portfolio-item break-inside-avoid relative group overflow-hidden rounded-xl shadow-lg hover:shadow-2xl transition duration-300">
+                <img src="https://images.unsplash.com/photo-1529626455594-4ff0802cfb7e?w=600&h=800&fit=crop" alt="Portrait" class="w-full h-auto">
+                <div class="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent opacity-0 group-hover:opacity-100 transition duration-300 flex items-end">
+                    <div class="p-4 text-white">
+                        <h3 class="font-bold text-lg">Portrait Session</h3>
+                        <p class="text-sm">Professional headshot</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="portfolio-item break-inside-avoid relative group overflow-hidden rounded-xl shadow-lg hover:shadow-2xl transition duration-300">
+                <img src="https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=800&h=500&fit=crop" alt="Landscape" class="w-full h-auto">
+                <div class="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent opacity-0 group-hover:opacity-100 transition duration-300 flex items-end">
+                    <div class="p-4 text-white">
+                        <h3 class="font-bold text-lg">Nature Beauty</h3>
+                        <p class="text-sm">Mountain landscape</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="portfolio-item break-inside-avoid relative group overflow-hidden rounded-xl shadow-lg hover:shadow-2xl transition duration-300">
+                <img src="https://images.unsplash.com/photo-1511285560929-80b456fea0bc?w=600&h=600&fit=crop" alt="Wedding" class="w-full h-auto">
+                <div class="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent opacity-0 group-hover:opacity-100 transition duration-300 flex items-end">
+                    <div class="p-4 text-white">
+                        <h3 class="font-bold text-lg">Wedding Moment</h3>
+                        <p class="text-sm">Romantic celebration</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="portfolio-item break-inside-avoid relative group overflow-hidden rounded-xl shadow-lg hover:shadow-2xl transition duration-300">
+                <img src="https://images.unsplash.com/photo-1519741497674-611481863552?w=600&h=900&fit=crop" alt="Fashion" class="w-full h-auto">
+                <div class="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent opacity-0 group-hover:opacity-100 transition duration-300 flex items-end">
+                    <div class="p-4 text-white">
+                        <h3 class="font-bold text-lg">Fashion Editorial</h3>
+                        <p class="text-sm">Urban style shoot</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="portfolio-item break-inside-avoid relative group overflow-hidden rounded-xl shadow-lg hover:shadow-2xl transition duration-300">
+                <img src="https://images.unsplash.com/photo-1501594907352-04cda38ebc29?w=800&h=450&fit=crop" alt="Sunset" class="w-full h-auto">
+                <div class="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent opacity-0 group-hover:opacity-100 transition duration-300 flex items-end">
+                    <div class="p-4 text-white">
+                        <h3 class="font-bold text-lg">Golden Hour</h3>
+                        <p class="text-sm">Sunset serenity</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="portfolio-item break-inside-avoid relative group overflow-hidden rounded-xl shadow-lg hover:shadow-2xl transition duration-300">
+                <img src="https://images.unsplash.com/photo-1492691527719-9d1e07e534b4?w=600&h=800&fit=crop" alt="Event" class="w-full h-auto">
+                <div class="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent opacity-0 group-hover:opacity-100 transition duration-300 flex items-end">
+                    <div class="p-4 text-white">
+                        <h3 class="font-bold text-lg">Corporate Event</h3>
+                        <p class="text-sm">Business gathering</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="portfolio-item hidden-photo break-inside-avoid relative group overflow-hidden rounded-xl shadow-lg hover:shadow-2xl transition duration-300">
+                <img src="https://images.unsplash.com/photo-1465495976277-4387d4b0b4c6?w=600&h=600&fit=crop" alt="Food" class="w-full h-auto">
+                <div class="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent opacity-0 group-hover:opacity-100 transition duration-300 flex items-end">
+                    <div class="p-4 text-white">
+                        <h3 class="font-bold text-lg">Close Up Moments</h3>
+                        <p class="text-sm">Wedding Photography</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="portfolio-item hidden-photo break-inside-avoid relative group overflow-hidden rounded-xl shadow-lg hover:shadow-2xl transition duration-300">
+                <img src="https://images.unsplash.com/photo-1469334031218-e382a71b716b?w=600&h=850&fit=crop" alt="Travel" class="w-full h-auto">
+                <div class="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent opacity-0 group-hover:opacity-100 transition duration-300 flex items-end">
+                    <div class="p-4 text-white">
+                        <h3 class="font-bold text-lg">Summer Style</h3>
+                        <p class="text-sm">Holidays captured</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="portfolio-item hidden-photo break-inside-avoid relative group overflow-hidden rounded-xl shadow-lg hover:shadow-2xl transition duration-300">
+                <img src="https://images.unsplash.com/photo-1502920514313-52581002a659?w=800&h=500&fit=crop" alt="Architecture" class="w-full h-auto">
+                <div class="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent opacity-0 group-hover:opacity-100 transition duration-300 flex items-end">
+                    <div class="p-4 text-white">
+                        <h3 class="font-bold text-lg">Travel Stories</h3>
+                        <p class="text-sm">Travel shoot</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="portfolio-item hidden-photo break-inside-avoid relative group overflow-hidden rounded-xl shadow-lg hover:shadow-2xl transition duration-300">
+                <img src="https://images.unsplash.com/photo-1516733725897-1aa73b87c8e8?w=600&h=800&fit=crop" alt="Product" class="w-full h-auto">
+                <div class="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent opacity-0 group-hover:opacity-100 transition duration-300 flex items-end">
+                    <div class="p-4 text-white">
+                        <h3 class="font-bold text-lg">Sweet Part</h3>
+                        <p class="text-sm">Family moments</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="text-center mt-12">
+            <button id="show-more-btn" class="bg-green-600 text-white px-8 py-3 rounded-lg hover:bg-green-700 transition duration-200 font-medium text-lg">
+                Lihat Semua Portfolio
+            </button>
+        </div>
+    </div>
+
+    <div id="layanan" class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20">
+        <div class="mt-10 text-center mb-12">
+            <h2 class="text-3xl md:text-4xl font-bold text-gray-900 dark:text-white mb-4">Paket Layanan</h2>
+            <p class="text-lg text-gray-600 dark:text-gray-300">Pilih paket yang sesuai dengan kebutuhan Anda</p>
+        </div>
+
+        <div class="grid md:grid-cols-3 gap-8">
+            <div class="bg-white dark:bg-gray-800 rounded-2xl shadow-xl p-8 hover:shadow-2xl transition duration-300">
+                <div class="text-center mb-6">
+                    <h3 class="text-2xl font-bold text-gray-900 dark:text-white mb-2">Basic</h3>
+                    <div class="text-4xl font-bold text-green-600 dark:text-green-400 mb-2">Rp 500K</div>
+                    <p class="text-gray-600 dark:text-gray-400">Per Session</p>
+                </div>
+                <ul class="space-y-4 mb-8">
+                    <li class="flex items-start">
+                        <svg class="w-5 h-5 text-green-600 dark:text-green-400 mt-1 mr-3" fill="currentColor" viewBox="0 0 20 20">
+                            <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path>
+                        </svg>
+                        <span class="text-gray-700 dark:text-gray-300">20 Foto Edited</span>
+                    </li>
+                    <li class="flex items-start">
+                        <svg class="w-5 h-5 text-green-600 dark:text-green-400 mt-1 mr-3" fill="currentColor" viewBox="0 0 20 20">
+                            <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path>
+                        </svg>
+                        <span class="text-gray-700 dark:text-gray-300">1 Lokasi</span>
+                    </li>
+                    <li class="flex items-start">
+                        <svg class="w-5 h-5 text-green-600 dark:text-green-400 mt-1 mr-3" fill="currentColor" viewBox="0 0 20 20">
+                            <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path>
+                        </svg>
+                        <span class="text-gray-700 dark:text-gray-300">Softcopy File</span>
+                    </li>
+                </ul>
+                <button class="w-full bg-green-600 text-white py-3 rounded-lg hover:bg-green-700 transition duration-200 font-medium">
+                    Pilih Paket
+                </button>
+            </div>
+
+            <div class="bg-green-600 dark:bg-green-700 rounded-2xl shadow-xl p-8 hover:shadow-2xl transition duration-300 transform md:scale-105">
+                <div class="text-center mb-6">
+                    <div class="inline-block bg-white dark:bg-gray-800 text-green-600 dark:text-green-400 px-4 py-1 rounded-full text-sm font-bold mb-4">
+                        POPULAR
+                    </div>
+                    <h3 class="text-2xl font-bold text-white mb-2">Professional</h3>
+                    <div class="text-4xl font-bold text-white mb-2">Rp 1.2JT</div>
+                    <p class="text-green-100">Per Session</p>
+                </div>
+                <ul class="space-y-4 mb-8">
+                    <li class="flex items-start">
+                        <svg class="w-5 h-5 text-white mt-1 mr-3" fill="currentColor" viewBox="0 0 20 20">
+                            <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path>
+                        </svg>
+                        <span class="text-white">4 Jam Foto Session</span>
+                    </li>
+                    <li class="flex items-start">
+                        <svg class="w-5 h-5 text-white mt-1 mr-3" fill="currentColor" viewBox="0 0 20 20">
+                            <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path>
+                        </svg>
+                        <span class="text-white">50 Foto Edited</span>
+                    </li>
+                    <li class="flex items-start">
+                        <svg class="w-5 h-5 text-white mt-1 mr-3" fill="currentColor" viewBox="0 0 20 20">
+                            <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path>
+                        </svg>
+                        <span class="text-white">2 Lokasi</span>
+                    </li>
+                    <li class="flex items-start">
+                        <svg class="w-5 h-5 text-white mt-1 mr-3" fill="currentColor" viewBox="0 0 20 20">
+                            <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path>
+                        </svg>
+                        <span class="text-white">Softcopy + Hardcopy</span>
+                    </li>
+                    <li class="flex items-start">
+                        <svg class="w-5 h-5 text-white mt-1 mr-3" fill="currentColor" viewBox="0 0 20 20">
+                            <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path>
+                        </svg>
+                        <span class="text-white">Free Konsultasi</span>
+                    </li>
+                </ul>
+                <button class="w-full bg-white text-green-600 py-3 rounded-lg hover:bg-gray-100 transition duration-200 font-medium">
+                    Pilih Paket
+                </button>
+            </div>
+
+            <div class="bg-white dark:bg-gray-800 rounded-2xl shadow-xl p-8 hover:shadow-2xl transition duration-300">
+                <div class="text-center mb-6">
+                    <h3 class="text-2xl font-bold text-gray-900 dark:text-white mb-2">Premium</h3>
+                    <div class="text-4xl font-bold text-green-600 dark:text-green-400 mb-2">Rp 2.5JT</div>
+                    <p class="text-gray-600 dark:text-gray-400">Per Session</p>
+                </div>
+                <ul class="space-y-4 mb-8">
+                    <li class="flex items-start">
+                        <svg class="w-5 h-5 text-green-600 dark:text-green-400 mt-1 mr-3" fill="currentColor" viewBox="0 0 20 20">
+                            <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path>
+                        </svg>
+                        <span class="text-gray-700 dark:text-gray-300">Full Day Session</span>
+                    </li>
+                    <li class="flex items-start">
+                        <svg class="w-5 h-5 text-green-600 dark:text-green-400 mt-1 mr-3" fill="currentColor" viewBox="0 0 20 20">
+                            <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path>
+                        </svg>
+                        <span class="text-gray-700 dark:text-gray-300">100 Foto Edited</span>
+                    </li>
+                    <li class="flex items-start">
+                        <svg class="w-5 h-5 text-green-600 dark:text-green-400 mt-1 mr-3" fill="currentColor" viewBox="0 0 20 20">
+                            <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path>
+                        </svg>
+                        <span class="text-gray-700 dark:text-gray-300">Unlimited Lokasi</span>
+                    </li>
+                    <li class="flex items-start">
+                        <svg class="w-5 h-5 text-green-600 dark:text-green-400 mt-1 mr-3" fill="currentColor" viewBox="0 0 20 20">
+                            <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path>
+                        </svg>
+                        <span class="text-gray-700 dark:text-gray-300">Premium Album</span>
+                    </li>
+                    <li class="flex items-start">
+                        <svg class="w-5 h-5 text-green-600 dark:text-green-400 mt-1 mr-3" fill="currentColor" viewBox="0 0 20 20">
+                            <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path>
+                        </svg>
+                        <span class="text-gray-700 dark:text-gray-300">Video Highlight</span>
+                    </li>
+                </ul>
+                <button class="w-full bg-green-600 text-white py-3 rounded-lg hover:bg-green-700 transition duration-200 font-medium">
+                    Pilih Paket
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <footer id="kontak" class="bg-gray-800 dark:bg-gray-950 text-white mt-20">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+            <div class="grid md:grid-cols-4 gap-8">
+                <div class="col-span-2">
+                    <div class="flex items-center space-x-2 mb-4">
+                        <div class="w-10 h-10 bg-green-600 rounded-lg flex items-center justify-center">
+                            <span class="text-white font-bold text-xl">M</span>
+                        </div>
+                        <span class="text-xl font-bold">Miraen's Gallery</span>
+                    </div>
+                    <p class="text-gray-400 mb-4">Mengabadikan setiap momen berharga Anda dengan sentuhan profesional dan penuh cinta.</p>
+                    <div class="flex space-x-4">
+                        <a href="#" class="w-10 h-10 bg-gray-700 hover:bg-green-600 rounded-full flex items-center justify-center transition duration-200">
+                            <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
+                                <path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/>
+                            </svg>
+                        </a>
+                        <a href="#" class="w-10 h-10 bg-gray-700 hover:bg-green-600 rounded-full flex items-center justify-center transition duration-200">
+                            <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
+                                <path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/>
+                            </svg>
+                        </a>
+                        <a href="#" class="w-10 h-10 bg-gray-700 hover:bg-green-600 rounded-full flex items-center justify-center transition duration-200">
+                            <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
+                                <path d="M23.953 4.57a10 10 0 01-2.825.775 4.958 4.958 0 002.163-2.723c-.951.555-2.005.959-3.127 1.184a4.92 4.92 0 00-8.384 4.482C7.69 8.095 4.067 6.13 1.64 3.162a4.822 4.822 0 00-.666 2.475c0 1.71.87 3.213 2.188 4.096a4.904 4.904 0 01-2.228-.616v.06a4.923 4.923 0 003.946 4.827 4.996 4.996 0 01-2.212.085 4.936 4.936 0 004.604 3.417 9.867 9.867 0 01-6.102 2.105c-.39 0-.779-.023-1.17-.067a13.995 13.995 0 007.557 2.209c9.053 0 13.998-7.496 13.998-13.985 0-.21 0-.42-.015-.63A9.935 9.935 0 0024 4.59z"/>
+                            </svg>
+                        </a>
+                    </div>
+                </div>
+                
+                <div>
+                    <h3 class="text-lg font-bold mb-4">Menu</h3>
+                    <ul class="space-y-2">
+                        <li><a href="#" class="text-gray-400 hover:text-green-400 transition duration-200">Beranda</a></li>
+                        <li><a href="#" class="text-gray-400 hover:text-green-400 transition duration-200">Tentang</a></li>
+                        <li><a href="#layanan" class="text-gray-400 hover:text-green-400 transition duration-200">Layanan</a></li>
+                        <li><a href="#" class="text-gray-400 hover:text-green-400 transition duration-200">Portfolio</a></li>
+                        <li><a href="#" class="text-gray-400 hover:text-green-400 transition duration-200">Kontak</a></li>
+                    </ul>
+                </div>
+                
+                <div>
+                    <h3 class="text-lg font-bold mb-4">Kontak</h3>
+                    <ul class="space-y-2 text-gray-400">
+                        <li class="flex items-start">
+                            <svg class="w-5 h-5 mr-2 mt-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z"></path>
+                            </svg>
+                            +62 812-3456-7890
+                        </li>
+                        <li class="flex items-start">
+                            <svg class="w-5 h-5 mr-2 mt-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path>
+                            </svg>
+                            info@miraengallery.com
+                        </li>
+                        <li class="flex items-start">
+                            <svg class="w-5 h-5 mr-2 mt-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"></path>
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"></path>
+                            </svg>
+                            Jember, Jawa Timur
+                        </li>
+                    </ul>
+                </div>
+            </div>
+            
+            <div class="border-t border-gray-700 mt-8 pt-8 text-center text-gray-400">
+                <p>&copy; 2025 Miraen's Gallery. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Mobile menu toggle
+        const btn = document.getElementById('mobile-menu-button');
+        const menu = document.getElementById('mobile-menu');
+        
+        btn.addEventListener('click', () => {
+            menu.classList.toggle('hidden');
+        });
+
+        // Slideshow functionality
+        const slides = [
+            {
+                image: 'https://images.unsplash.com/photo-1452587925148-ce544e77e70d?w=800&h=600&fit=crop',
+                icon: 'M13 10V3L4 14h7v7l9-11h-7z',
+                title: 'Jangan Khawatir',
+                description: 'Kami bisa diandalkan'
+            },
+            {
+                image: 'https://images.unsplash.com/photo-1492691527719-9d1e07e534b4?w=800&h=600&fit=crop',
+                icon: 'M3 9a2 2 0 012-2h.93a2 2 0 001.664-.89l.812-1.22A2 2 0 0110.07 4h3.86a2 2 0 011.664.89l.812 1.22A2 2 0 0018.07 7H19a2 2 0 012 2v9a2 2 0 01-2 2H5a2 2 0 01-2-2V9z M15 13a3 3 0 11-6 0 3 3 0 016 0z',
+                title: 'Tangkap Setiap Momen',
+                description: 'Kenangan yang abadi dalam setiap frame'
+            },
+            {
+                image: 'https://images.unsplash.com/photo-1511285560929-80b456fea0bc?w=800&h=600&fit=crop',
+                icon: 'M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z',
+                title: 'Penuh Cinta',
+                description: 'Setiap foto dibuat dengan passion'
+            },
+            {
+                image: 'https://images.unsplash.com/photo-1519741497674-611481863552?w=800&h=600&fit=crop',
+                icon: 'M5 3v4M3 5h4M6 17v4m-2-2h4m5-16l2.286 6.857L21 12l-5.714 2.143L13 21l-2.286-6.857L5 12l5.714-2.143L13 3z',
+                title: 'Kualitas Premium',
+                description: 'Hasil terbaik untuk momen terbaik Anda'
+            }
+        ];
+
+        let currentSlide = 0;
+        const slideshow = document.getElementById('slideshow');
+        const dots = document.querySelectorAll('.dot');
+
+        // JavaScript untuk Dark Mode
+        const themeToggleBtn = document.getElementById('theme-toggle');
+        const themeToggleMobileBtn = document.getElementById('theme-toggle-mobile');
+        const themeToggleDarkIcon = document.getElementById('theme-toggle-dark-icon');
+        const themeToggleLightIcon = document.getElementById('theme-toggle-light-icon');
+        const themeToggleDarkIconMobile = document.getElementById('theme-toggle-dark-icon-mobile');
+        const themeToggleLightIconMobile = document.getElementById('theme-toggle-light-icon-mobile');
+
+        // Cek preferensi user saat load
+        if (localStorage.getItem('color-theme') === 'dark' || (!('color-theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+            document.documentElement.classList.add('dark');
+            themeToggleLightIcon.classList.remove('hidden');
+            themeToggleLightIconMobile.classList.remove('hidden');
+        } else {
+            themeToggleDarkIcon.classList.remove('hidden');
+            themeToggleDarkIconMobile.classList.remove('hidden');
+        }
+
+        // Function untuk toggle theme
+        function toggleTheme() {
+            themeToggleDarkIcon.classList.toggle('hidden');
+            themeToggleLightIcon.classList.toggle('hidden');
+            themeToggleDarkIconMobile.classList.toggle('hidden');
+            themeToggleLightIconMobile.classList.toggle('hidden');
+
+            if (document.documentElement.classList.contains('dark')) {
+                document.documentElement.classList.remove('dark');
+                localStorage.setItem('color-theme', 'light');
+            } else {
+                document.documentElement.classList.add('dark');
+                localStorage.setItem('color-theme', 'dark');
+            }
+        }
+
+        // Event listeners
+        themeToggleBtn.addEventListener('click', toggleTheme);
+        themeToggleMobileBtn.addEventListener('click', toggleTheme);
+
+        function createSlideHTML(slide) {
+            return `
+                <div class="slide absolute inset-0 flex items-center justify-center">
+                    <img src="${slide.image}" alt="Slideshow" class="absolute inset-0 w-full h-full object-cover">
+                    <div class="absolute inset-0 bg-black/40"></div>
+                    <div class="relative text-center text-white p-8 z-10">
+                        <svg class="w-24 h-24 mx-auto mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="${slide.icon}"></path>
+                        </svg>
+                        <h3 class="text-3xl font-bold mb-2">${slide.title}</h3>
+                        <p class="text-lg">${slide.description}</p>
+                    </div>
+                </div>
+            `;
+        }
+
+        function showSlide(index) {
+            slideshow.innerHTML = createSlideHTML(slides[index]);
+
+            dots.forEach((dot, i) => {
+                if (i === index) {
+                    dot.classList.remove('bg-gray-300');
+                    dot.classList.add('bg-green-600');
+                } else {
+                    dot.classList.remove('bg-green-600');
+                    dot.classList.add('bg-gray-300');
+                }
+            });
+        }
+
+        function nextSlide() {
+            currentSlide = (currentSlide + 1) % slides.length;
+            showSlide(currentSlide);
+        }
+
+        setInterval(nextSlide, 4000);
+
+        dots.forEach((dot, index) => {
+            dot.addEventListener('click', () => {
+                currentSlide = index;
+                showSlide(currentSlide);
+            });
+        });
+
+        const observerOptions = {
+            threshold: 0.1,
+            rootMargin: '0px 0px -50px 0px'
+        };
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('show');
+                }
+            });
+        }, observerOptions);
+
+        const portfolioItems = document.querySelectorAll('.portfolio-item');
+        portfolioItems.forEach(item => observer.observe(item));
+
+        const showMoreBtn = document.getElementById('show-more-btn');
+        const hiddenPhotos = document.querySelectorAll('.hidden-photo');
+        let isExpanded = false;
+
+        showMoreBtn.addEventListener('click', () => {
+            if (!isExpanded) {
+                hiddenPhotos.forEach((photo, index) => {
+                    photo.classList.remove('hidden-photo');
+                    photo.style.display = 'block';
+                    setTimeout(() => {
+                        observer.observe(photo);
+                    }, 100 * index);
+                });
+                showMoreBtn.textContent = 'Tampilkan Lebih Sedikit';
+                isExpanded = true;
+            } else {
+                hiddenPhotos.forEach(photo => {
+                    photo.classList.add('hidden-photo');
+                    photo.style.display = 'none';
+                    photo.classList.remove('show');
+                });
+                showMoreBtn.textContent = 'Lihat Semua Portfolio';
+                isExpanded = false;
+                
+                document.querySelector('#portfolio-grid').scrollIntoView({ 
+                    behavior: 'smooth', 
+                    block: 'start' 
+                });
+            }
+        });
+    </script>
+</body>
+</html>
